@@ -2,12 +2,14 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ShoppingCart, Code2, Puzzle, Wrench, MessageCircle } from 'lucide-react';
 import HeroCarousel from './HeroCarousel';
+import { useFooterInfo } from '../hooks/useFooterInfo';
 
 interface HeroProps {
   onNavigate: (sectionId: string) => void;
 }
 
 export default function Hero({ onNavigate }: HeroProps) {
+  const { footerInfo } = useFooterInfo();
   return (
     <section
       id="hero"
@@ -90,7 +92,7 @@ export default function Hero({ onNavigate }: HeroProps) {
 
             {/* Outlined Button with WhatsApp Icon */}
             <a
-              href="https://wa.me/5521987654321"
+              href={`https://wa.me/${footerInfo.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               id="hero-whatsapp-btn"

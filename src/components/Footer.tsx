@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Instagram, Linkedin } from 'lucide-react';
 import ArgtechLogo from './ArgtechLogo';
+import { useFooterInfo } from '../hooks/useFooterInfo';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
@@ -8,6 +9,7 @@ interface FooterProps {
 
 export default function Footer({ onNavigate }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const { footerInfo } = useFooterInfo();
 
   return (
     <div className="bg-[#050505]">
@@ -36,7 +38,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           {/* Right Button & Phone Info */}
           <div className="flex flex-col items-start md:items-end shrink-0 gap-3">
             <a
-              href="https://wa.me/5521987654321"
+              href={`https://wa.me/${footerInfo.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               id="footer-cta-whatsapp"
@@ -49,7 +51,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             {/* Direct Phone Number Line */}
             <div className="flex items-center gap-2 text-white/85 font-sans font-semibold text-xs tracking-wider mt-1 hover:text-[#3533CD] transition-colors">
               <Phone size={14} className="text-[#3533CD]" />
-              <span>(XX) XXXX-XXXX</span>
+              <span>{footerInfo.phone}</span>
             </div>
           </div>
         </div>
@@ -84,7 +86,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               {/* Social Icons exactly matching mockup style */}
               <div className="flex items-center gap-4 pt-2">
                 <a 
-                  href="https://wa.me/5521987654321" 
+                  href={footerInfo.whatsapp ? `https://wa.me/${footerInfo.whatsapp}` : '#'} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#A8A8A8] hover:text-white hover:border-white transition-all duration-300"
@@ -93,7 +95,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                   <MessageCircle size={15} />
                 </a>
                 <a 
-                  href="https://instagram.com" 
+                  href={footerInfo.instagram} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#A8A8A8] hover:text-white hover:border-white transition-all duration-300"
@@ -102,7 +104,7 @@ export default function Footer({ onNavigate }: FooterProps) {
                   <Instagram size={15} />
                 </a>
                 <a 
-                  href="https://linkedin.com" 
+                  href={footerInfo.linkedin} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-[#A8A8A8] hover:text-white hover:border-white transition-all duration-300"
@@ -170,15 +172,15 @@ export default function Footer({ onNavigate }: FooterProps) {
               <ul className="space-y-4 text-xs text-[#A8A8A8]">
                 <li className="flex items-center gap-3">
                   <Phone size={14} className="text-[#3533CD] shrink-0" />
-                  <span>(XX) XXXX-XXXX</span>
+                  <span>{footerInfo.phone}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Mail size={14} className="text-[#3533CD] shrink-0" />
-                  <span>contato@argtech.com.br</span>
+                  <span>{footerInfo.email}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <MapPin size={14} className="text-[#3533CD] shrink-0" />
-                  <span>Sua cidade/UF</span>
+                  <span>{footerInfo.address}</span>
                 </li>
               </ul>
             </div>

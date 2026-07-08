@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ArgtechLogo from './ArgtechLogo';
+import { useFooterInfo } from '../hooks/useFooterInfo';
 
 interface NavbarProps {
   onNavigate: (sectionId: string) => void;
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
 export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { footerInfo } = useFooterInfo();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,7 +92,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
           {/* Right Action Button - Fale Conosco with blue outline and phone/whatsapp icon */}
           <div className="hidden sm:flex items-center gap-4">
             <a
-              href="https://wa.me/5521987654321" // Replace with placeholder or WhatsApp link
+              href={`https://wa.me/${footerInfo.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               id="cta-whatsapp-nav"
@@ -104,7 +106,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
           {/* Mobile elements (CTA + Hamburger) */}
           <div className="flex md:hidden items-center gap-3">
             <a
-              href="https://wa.me/5521987654321"
+              href={`https://wa.me/${footerInfo.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               id="cta-whatsapp-nav-mobile"
@@ -180,7 +182,7 @@ export default function Navbar({ onNavigate, activeSection }: NavbarProps) {
               <div className="h-px w-full bg-[#1A1A1A]" />
 
               <a
-                href="https://wa.me/5521987654321"
+                href={`https://wa.me/${footerInfo.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="mobile-drawer-whatsapp-btn"

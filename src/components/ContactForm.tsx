@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, ShieldCheck, AlertCircle, X } from 'lucide-react';
 import type { ContactFormData } from '../types';
+import { useFooterInfo } from '../hooks/useFooterInfo';
 
 interface ValidationErrors {
   name?: string;
@@ -68,6 +69,7 @@ const validateField = (name: string, value: string): string | undefined => {
 };
 
 export default function ContactForm() {
+  const { footerInfo } = useFooterInfo();
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -203,7 +205,7 @@ export default function ContactForm() {
                   </div>
                   <div>
                     <span className="text-[9px] font-mono text-[#A8A8A8] uppercase tracking-wider block font-bold">Central de Atendimento</span>
-                    <span className="font-sans text-xs sm:text-sm font-semibold text-white">(XX) XXXX-XXXX</span>
+                    <span className="font-sans text-xs sm:text-sm font-semibold text-white">{footerInfo.phone}</span>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -212,7 +214,7 @@ export default function ContactForm() {
                   </div>
                   <div>
                     <span className="text-[9px] font-mono text-[#A8A8A8] uppercase tracking-wider block font-bold">E-mail Comercial</span>
-                    <span className="font-sans text-xs sm:text-sm font-semibold text-white">contato@argtech.com.br</span>
+                    <span className="font-sans text-xs sm:text-sm font-semibold text-white">{footerInfo.email}</span>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -221,7 +223,7 @@ export default function ContactForm() {
                   </div>
                   <div>
                     <span className="text-[9px] font-mono text-[#A8A8A8] uppercase tracking-wider block font-bold">Sede Corporativa</span>
-                    <span className="font-sans text-xs leading-relaxed text-white">Sua cidade/UF</span>
+                    <span className="font-sans text-xs leading-relaxed text-white">{footerInfo.address}</span>
                   </div>
                 </div>
               </div>
