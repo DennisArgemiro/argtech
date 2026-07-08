@@ -869,18 +869,97 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
               >
                 <div className="flex items-center justify-between">
                   <h2 className="font-sans text-2xl font-bold text-white">Seção Contato</h2>
-                  <button
-                    onClick={() => handleSaveTexts(contactTexts)}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-[#3533CD] hover:bg-[#3533CD]/90 text-white font-sans text-xs font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
-                  >
-                    <Save size={14} />
-                    {saving ? 'Salvando...' : 'Salvar'}
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleSaveFooter}
+                      disabled={saving}
+                      className="flex items-center gap-2 bg-[#3533CD] hover:bg-[#3533CD]/90 text-white font-sans text-xs font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 cursor-pointer"
+                    >
+                      <Save size={14} />
+                      {saving ? 'Salvando...' : 'Salvar'}
+                    </button>
+                    <button
+                      onClick={() => handleSaveTexts(contactTexts)}
+                      disabled={saving}
+                      className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white text-xs py-2 px-4 rounded-md transition-colors cursor-pointer"
+                    >
+                      <Save size={14} />
+                      Salvar Textos
+                    </button>
+                  </div>
                 </div>
 
+                {/* Contact Info Form */}
                 <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Textos</h3>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Informações de Contato</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">Telefone</label>
+                      <input
+                        type="text"
+                        value={footerInfo.phone}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, phone: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="(XX) XXXX-XXXX"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">E-mail</label>
+                      <input
+                        type="email"
+                        value={footerInfo.email}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, email: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="contato@argtech.com.br"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">Endereço</label>
+                      <input
+                        type="text"
+                        value={footerInfo.address}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, address: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="Sua cidade/UF"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">WhatsApp</label>
+                      <input
+                        type="text"
+                        value={footerInfo.whatsapp}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, whatsapp: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="5521987654321"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">Instagram</label>
+                      <input
+                        type="text"
+                        value={footerInfo.instagram}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, instagram: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="https://instagram.com/argtech"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs text-[#A8A8A8]">LinkedIn</label>
+                      <input
+                        type="text"
+                        value={footerInfo.linkedin}
+                        onChange={(e) => setFooterInfo({ ...footerInfo, linkedin: e.target.value })}
+                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
+                        placeholder="https://linkedin.com/company/argtech"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Texts */}
+                <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Textos da Seção</h3>
                   {contactTexts.map((text) => (
                     <div key={text.id}>
                       {text.value.length > 50 ? (
@@ -1123,73 +1202,6 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
                     <Save size={14} />
                     {saving ? 'Salvando...' : 'Salvar'}
                   </button>
-                </div>
-
-                <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-6 space-y-4">
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Informações de Contato</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">Telefone</label>
-                      <input
-                        type="text"
-                        value={footerInfo.phone}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, phone: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="(XX) XXXX-XXXX"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">E-mail</label>
-                      <input
-                        type="email"
-                        value={footerInfo.email}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, email: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="contato@argtech.com.br"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">Endereço</label>
-                      <input
-                        type="text"
-                        value={footerInfo.address}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, address: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="Sua cidade/UF"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">WhatsApp</label>
-                      <input
-                        type="text"
-                        value={footerInfo.whatsapp}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, whatsapp: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="5521987654321"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">Instagram</label>
-                      <input
-                        type="text"
-                        value={footerInfo.instagram}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, instagram: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="https://instagram.com/argtech"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-[#A8A8A8]">LinkedIn</label>
-                      <input
-                        type="text"
-                        value={footerInfo.linkedin}
-                        onChange={(e) => setFooterInfo({ ...footerInfo, linkedin: e.target.value })}
-                        className="bg-[#111] border border-white/10 rounded-md py-2 px-3 text-white text-sm focus:outline-none focus:border-[#3533CD] transition-colors"
-                        placeholder="https://linkedin.com/company/argtech"
-                      />
-                    </div>
-                  </div>
                 </div>
 
                 {/* Footer Texts */}
