@@ -1,0 +1,6 @@
+{
+  "name": "Argtech Soluções em Informática",
+  "description": "Soluções que conectam. Tecnologia que impulsiona. Automação comercial, desenvolvimento de software, integração de sistemas e infraestrutura corporativa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
