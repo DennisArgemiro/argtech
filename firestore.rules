@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public read access for published content
+    match /footer_info/{doc} {
+      allow read: if true;
+    }
+    match /site_texts/{doc} {
+      allow read: if true;
+    }
+    match /services/{doc} {
+      allow read: if resource.data.visible == true;
+    }
+    match /carousel_slides/{doc} {
+      allow read: if resource.data.visible == true;
+    }
+    match /navigation/{doc} {
+      allow read: if resource.data.visible == true;
+    }
+    match /contacts/{doc} {
+      allow read: if resource.data.visible == true;
+    }
+    match /images/{doc} {
+      allow read: if true;
+    }
+    
+    // Contact messages - anyone can create, only admins can read
+    match /contact_messages/{doc} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    // Admin full access (authenticated users with admin custom claim)
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+  }
+}

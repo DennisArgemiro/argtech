@@ -2,8 +2,10 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Check, Users, Shield, Rocket, BarChart3, MessageCircle } from 'lucide-react';
 import ArgtechLogo from './ArgtechLogo';
+import { useFooterInfo } from '../hooks/useFooterInfo';
 
 export default function Benefits() {
+  const { footerInfo } = useFooterInfo();
   return (
     <section id="benefits" className="py-24 bg-[#050505] relative overflow-hidden border-t border-white/5">
       {/* Background Soft Ambient Light */}
@@ -141,7 +143,7 @@ export default function Benefits() {
 
               {/* CTA button Falar com Especialista */}
               <a
-                href="https://wa.me/5521987654321"
+                href={`https://wa.me/${footerInfo.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 id="benefits-specialist-cta"
