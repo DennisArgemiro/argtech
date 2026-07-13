@@ -20,6 +20,9 @@ service cloud.firestore {
     match /contacts/{doc} {
       allow read: if resource.data.visible == true;
     }
+    match /projects/{doc} {
+      allow read: if resource.data.visible == true;
+    }
     match /images/{doc} {
       allow read: if true;
     }

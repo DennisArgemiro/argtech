@@ -220,16 +220,20 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const handleSaveFooter = async () => {
     setSaving(true);
     try {
+      const data = {
+        phone: footerInfo.phone ?? '',
+        email: footerInfo.email ?? '',
+        address: footerInfo.address ?? '',
+        whatsapp: footerInfo.whatsapp ?? '',
+        instagram: footerInfo.instagram ?? '',
+        linkedin: footerInfo.linkedin ?? ''
+      };
       if (footerInfo.id) {
         const footerRef = doc(db, 'footer_info', footerInfo.id);
-        await updateDoc(footerRef, {
-          phone: footerInfo.phone ?? '',
-          email: footerInfo.email ?? '',
-          address: footerInfo.address ?? '',
-          whatsapp: footerInfo.whatsapp ?? '',
-          instagram: footerInfo.instagram ?? '',
-          linkedin: footerInfo.linkedin ?? ''
-        });
+        await updateDoc(footerRef, data);
+      } else {
+        const docRef = await addDoc(collection(db, 'footer_info'), data);
+        setFooterInfo({ ...footerInfo, id: docRef.id });
       }
       alert('Rodapé salvo com sucesso!');
     } catch (error) {
