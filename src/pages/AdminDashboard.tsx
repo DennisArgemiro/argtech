@@ -123,10 +123,14 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
       // Load projects
       const projectsSnapshot = await getDocs(collection(db, 'projects'));
-      const projectsData = projectsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Project[];
+      console.log('[Admin] Projects snapshot:', projectsSnapshot.size, 'docs');
+      const projectsData = projectsSnapshot.docs.map(doc => {
+        console.log('[Admin] Project doc:', doc.id, doc.data());
+        return {
+          id: doc.id,
+          ...doc.data()
+        };
+      }) as Project[];
       projectsData.sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
       setProjects(projectsData);
 

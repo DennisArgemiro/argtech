@@ -12,6 +12,11 @@ const firebaseConfig = {
   appId: import.meta.env?.VITE_FIREBASE_APP_ID || process.env.VITE_FIREBASE_APP_ID
 };
 
+console.log('[Firebase] Config:', {
+  projectId: firebaseConfig.projectId,
+  apiKey: firebaseConfig.apiKey ? '***present***' : 'MISSING',
+});
+
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
