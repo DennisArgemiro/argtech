@@ -122,12 +122,12 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       setServices(servicesData);
 
       // Load projects
-      const projectsQuery = query(collection(db, 'projects'), orderBy('order_index'));
-      const projectsSnapshot = await getDocs(projectsQuery);
+      const projectsSnapshot = await getDocs(collection(db, 'projects'));
       const projectsData = projectsSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Project[];
+      projectsData.sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
       setProjects(projectsData);
 
       // Load footer info
