@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ExternalLink, ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 interface Project {
@@ -27,13 +27,17 @@ export default function Projects() {
 
   const loadProjects = async () => {
     try {
-      const snapshot = await getDocs(collection(db, 'projects'));
+      const q = query(
+        collection(db, 'projects'),
+        where('visible', '==', true)
+      );
+      const snapshot = await getDocs(q);
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Project[];
       data.sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
-      setProjects(data.filter(p => p.visible));
+      setProjects(data);
     } catch (error) {
       console.error('Error loading projects:', error);
     }

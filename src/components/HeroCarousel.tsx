@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 import heroBanner from '../assets/images/argtech_hero_banner_1783306907106.jpg';
@@ -43,7 +43,11 @@ export default function HeroCarousel({ onNavigate: _onNavigate }: HeroCarouselPr
 
   const loadCarouselSlides = async () => {
     try {
-      const carouselQuery = query(collection(db, 'carousel_slides'), orderBy('order_index'));
+      const carouselQuery = query(
+        collection(db, 'carousel_slides'),
+        where('visible', '==', true),
+        orderBy('order_index')
+      );
       const carouselSnapshot = await getDocs(carouselQuery);
       
       if (carouselSnapshot.docs.length > 0) {
