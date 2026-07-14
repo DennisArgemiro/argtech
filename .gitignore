@@ -22,6 +22,12 @@ coverage/
 # Exception: allow example file
 !.env.example
 
+# Firebase service account (contains private keys!)
+service-account.json
+
+# One-time admin setup script
+scripts/
+
 # IDE/Editor files
 .idea/
 .vscode/

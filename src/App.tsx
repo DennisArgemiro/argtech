@@ -8,17 +8,34 @@ import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminHoneypot from './components/AdminHoneypot';
 import { auth } from './lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
-type Page = 'home' | 'admin';
+type Page = 'home' | 'admin' | 'honeypot';
+
+const ADMIN_PATH = (import.meta.env.VITE_ADMIN_SECRET_PATH || 'gestao-argtech').replace(/^\//, '');
+
+const HONEYPOT_PATHS = [
+  '/admin',
+  '/administrador',
+  '/painel',
+  '/backend',
+  '/controle',
+  '/gerenciamento',
+  '/painel-de-controle',
+  '/administrativo',
+];
+
+function matchHoneypot(path: string): boolean {
+  return HONEYPOT_PATHS.includes(path);
+}
 
 export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
-  // Check for admin session (verify custom claims)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -36,10 +53,13 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Check URL for admin route
   useEffect(() => {
-    if (window.location.pathname === '/admin') {
+    const path = window.location.pathname;
+
+    if (path === `/${ADMIN_PATH}`) {
       setPage('admin');
+    } else if (matchHoneypot(path)) {
+      setPage('honeypot');
     }
   }, []);
 
@@ -51,7 +71,6 @@ export default function App() {
     }
   };
 
-  // ScrollSpy
   useEffect(() => {
     const sections = ['hero', 'services', 'about', 'projects', 'contact'];
 
@@ -80,7 +99,10 @@ export default function App() {
     scrollToSection('contact');
   };
 
-  // Admin routes
+  if (page === 'honeypot') {
+    return <AdminHoneypot />;
+  }
+
   if (page === 'admin') {
     if (!isAdmin) {
       return <AdminLogin onLogin={() => setIsAdmin(true)} />;

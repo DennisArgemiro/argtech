@@ -41,6 +41,12 @@ service cloud.firestore {
       allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
     }
 
+    // Honeypot/audit log: only serverless function can write (Admin SDK)
+    // No one can read this from the client side
+    match /intruder_attempts/{doc} {
+      allow read, write, create, update, delete: if false;
+    }
+
     // Admin full access (authenticated users with admin custom claim)
     match /{document=**} {
       allow read, write: if request.auth != null && request.auth.token.admin == true;
