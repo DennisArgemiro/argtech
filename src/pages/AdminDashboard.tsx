@@ -14,6 +14,11 @@ import ArgtechLogo from '../components/ArgtechLogo';
 
 const sanitize = (value: string): string => value.replace(/[<>]/g, '').trim();
 
+const isValidURL = (url: string): boolean => {
+  if (!url || url.trim() === '') return true;
+  return /^https?:\/\/.+\..+/i.test(url.trim()) || url.startsWith('data:image/');
+};
+
 interface AdminDashboardProps {
   onLogout: () => void;
 }
@@ -203,6 +208,11 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     setSaving(true);
     try {
       for (const project of projects) {
+        if (!isValidURL(project.visit_url)) {
+          alert(`URL inválida no projeto "${project.title}": ${project.visit_url}`);
+          setSaving(false);
+          return;
+        }
         const projectRef = doc(db, 'projects', project.id);
         await updateDoc(projectRef, {
           title: sanitize(project.title ?? ''),
@@ -325,10 +335,20 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
   const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+      if (file.size > MAX_FILE_SIZE) {
+        reject(new Error(`Arquivo muito grande (máx ${MAX_FILE_SIZE / 1024 / 1024}MB)`));
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         const img = new window.Image();
+        const timeoutId = setTimeout(() => {
+          img.src = '';
+          reject(new Error('Timeout ao processar imagem'));
+        }, 15000);
         img.onload = () => {
+          clearTimeout(timeoutId);
           const canvas = document.createElement('canvas');
           const maxSize = 800;
           let width = img.width;
@@ -350,7 +370,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
           ctx?.drawImage(img, 0, 0, width, height);
           resolve(canvas.toDataURL('image/jpeg', 0.7));
         };
-        img.onerror = reject;
+        img.onerror = () => {
+          clearTimeout(timeoutId);
+          reject(new Error('Erro ao carregar imagem'));
+        };
         img.src = reader.result as string;
       };
       reader.onerror = reject;

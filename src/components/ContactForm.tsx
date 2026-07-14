@@ -86,6 +86,8 @@ export default function ContactForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [honeypot, setHoneypot] = useState('');
+  const [lastSubmitAt, setLastSubmitAt] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
   const validateForm = useCallback((): boolean => {
     const newErrors: ValidationErrors = {};
@@ -145,6 +147,15 @@ export default function ContactForm() {
       return;
     }
 
+    const now = Date.now();
+    if (now - lastSubmitAt < 30000) {
+      const secs = Math.ceil((30000 - (now - lastSubmitAt)) / 1000);
+      setCooldown(secs);
+      setSubmitError(`Aguarde ${secs}s antes de enviar novamente.`);
+      return;
+    }
+
+    setCooldown(0);
     setIsSubmitting(true);
 
     try {
@@ -158,6 +169,7 @@ export default function ContactForm() {
         throw new Error('Erro ao enviar formulário');
       }
 
+      setLastSubmitAt(Date.now());
       setIsSubmitting(false);
       setShowSuccessModal(true);
     } catch {
