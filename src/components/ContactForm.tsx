@@ -11,6 +11,7 @@ interface ValidationErrors {
   company?: string;
   service?: string;
   message?: string;
+  honeypot?: string;
   [key: string]: string | undefined;
 }
 
@@ -84,6 +85,7 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   const validateForm = useCallback((): boolean => {
     const newErrors: ValidationErrors = {};
@@ -136,6 +138,12 @@ export default function ContactForm() {
     setSubmitError('');
 
     if (!validateForm()) {return;}
+
+    if (honeypot) {
+      setSubmitError('');
+      setShowSuccessModal(true);
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -391,6 +399,19 @@ export default function ContactForm() {
                     <span className="absolute -bottom-5 left-0 text-red-400 text-[9px] font-medium">{errors.service}</span>
                   )}
                 </div>
+              </div>
+
+              <div aria-hidden="true" className="absolute opacity-0 h-0 overflow-hidden" style={{ position: 'absolute', left: '-9999px' }}>
+                <label htmlFor="honeypot">Não preencher</label>
+                <input
+                  id="honeypot"
+                  type="text"
+                  name="honeypot"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
               </div>
 
               <div className="flex flex-col gap-2">

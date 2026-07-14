@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import { auth } from './lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 type Page = 'home' | 'admin';
 
@@ -18,10 +18,19 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
 
-  // Check for admin session
+  // Check for admin session (verify custom claims)
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAdmin(!!user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const tokenResult = await user.getIdTokenResult();
+          setIsAdmin(tokenResult.claims.admin === true);
+        } catch {
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => unsubscribe();

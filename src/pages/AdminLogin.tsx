@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Lock, Mail, ArrowRight, AlertCircle, Clock } from 'lucide-react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import ArgtechLogo from '../components/ArgtechLogo';
 
@@ -91,7 +91,14 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, sanitizedEmail, sanitizedPassword);
+      const userCredential = await signInWithEmailAndPassword(auth, sanitizedEmail, sanitizedPassword);
+
+      const tokenResult = await userCredential.user.getIdTokenResult();
+      if (tokenResult.claims.admin !== true) {
+        await signOut(auth);
+        setError('Acesso negado. Você não tem permissões de administrador.');
+        return;
+      }
 
       setStoredAttempts({ count: 0, lockoutUntil: 0 });
       setAttempts({ count: 0, lockoutUntil: 0 });

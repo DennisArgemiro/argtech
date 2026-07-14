@@ -39,7 +39,7 @@ export function useFooterInfo() {
           } as FooterInfo);
         }
       } catch (err) {
-        console.error('Error loading footer info:', err);
+        if (import.meta.env.DEV) console.error('Error loading footer info:', err);
         setError(err as Error);
       } finally {
         setLoading(false);

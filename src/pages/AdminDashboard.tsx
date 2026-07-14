@@ -12,6 +12,8 @@ import {
 import { auth, db } from '../lib/firebase';
 import ArgtechLogo from '../components/ArgtechLogo';
 
+const sanitize = (value: string): string => value.replace(/[<>]/g, '').trim();
+
 interface AdminDashboardProps {
   onLogout: () => void;
 }
@@ -164,7 +166,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     try {
       for (const text of textsToSave) {
         const textRef = doc(db, 'site_texts', text.id);
-        await updateDoc(textRef, { value: text.value ?? '' });
+        await updateDoc(textRef, { value: sanitize(text.value ?? '') });
       }
       alert('Textos salvos com sucesso!');
     } catch (error) {
@@ -180,10 +182,10 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       for (const service of services) {
         const serviceRef = doc(db, 'services', service.id);
         await updateDoc(serviceRef, {
-          title: service.title ?? '',
-          description: service.description ?? '',
-          long_description: service.long_description ?? '',
-          icon: service.icon ?? '',
+          title: sanitize(service.title ?? ''),
+          description: sanitize(service.description ?? ''),
+          long_description: sanitize(service.long_description ?? ''),
+          icon: sanitize(service.icon ?? ''),
           image_url: service.image_url ?? '',
           order_index: service.order_index ?? 0,
           visible: service.visible ?? true
@@ -203,9 +205,9 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       for (const project of projects) {
         const projectRef = doc(db, 'projects', project.id);
         await updateDoc(projectRef, {
-          title: project.title ?? '',
-          subtitle: project.subtitle ?? '',
-          description: project.description ?? '',
+          title: sanitize(project.title ?? ''),
+          subtitle: sanitize(project.subtitle ?? ''),
+          description: sanitize(project.description ?? ''),
           cover_image: project.cover_image ?? '',
           images: project.images ?? [],
           visit_url: project.visit_url ?? '',
@@ -254,8 +256,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
         const slideRef = doc(db, 'carousel_slides', slide.id);
         await updateDoc(slideRef, {
           image: slide.image ?? '',
-          title: slide.title ?? '',
-          subtitle: slide.subtitle ?? '',
+          title: sanitize(slide.title ?? ''),
+          subtitle: sanitize(slide.subtitle ?? ''),
           order_index: slide.order_index ?? 0,
           visible: slide.visible ?? true
         });
