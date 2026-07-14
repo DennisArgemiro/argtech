@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 export interface FooterInfo {
   id: string;
@@ -30,7 +30,11 @@ export function useFooterInfo() {
   useEffect(() => {
     const loadFooterInfo = async () => {
       try {
-        const footerSnapshot = await getDocs(collection(db, 'footer_info'));
+        const q = query(
+          collection(db, 'footer_info'),
+          where('visible', '==', true)
+        );
+        const footerSnapshot = await getDocs(q);
         const footerDoc = footerSnapshot.docs[0];
         if (footerDoc) {
           setFooterInfo({
